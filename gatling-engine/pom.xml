@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project xsi:schemaLocation='http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd' xmlns='http://maven.apache.org/POM/4.0.0' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.snice.gatling</groupId>
+        <artifactId>snice-gatling-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <name>Snice Gatling Engine</name>
+    <artifactId>snice-gatling-engine</artifactId>
+    <packaging>jar</packaging>
+    <description/>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.snice.gatling</groupId>
+            <artifactId>snice-gatling-diameter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.snice</groupId>
+            <artifactId>snice-commons</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.snice.codecs</groupId>
+            <artifactId>codec-diameter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.gatling</groupId>
+            <artifactId>gatling-app</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven-jar-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>io.gatling</groupId>
+                <artifactId>gatling-maven-plugin</artifactId>
+                <configuration>
+                    <configFolder>src/main/resources</configFolder>
+                    <simulationsFolder>src/main/scala</simulationsFolder>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <configuration>
+                    <createDependencyReducedPom>true</createDependencyReducedPom>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.DSA</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation='org.apache.maven.plugins.shade.resource.ManifestResourceTransformer'>
+                                    <mainClass>io.snice.gatling.Engine</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+	</plugins>
+    </build>
+
+</project>
