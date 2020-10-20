@@ -8,7 +8,12 @@ import io.snice.codecs.codec.diameter.avp.{Avp, AvpReflection, FramedAvp}
 
 trait DiameterCheckSupport {
 
-  val status: DiameterCheckBuilder[Long] = new DiameterCheckBuilder(new StatusExtractor)
+  // TODO: figure out how to get this going.
+  // def status: DiameterCheckBuilder[ExperimentalResultCode] = new DiameterCheckBuilder(new StatusExperimentalResultCodeExtractor)
+  // def status: DiameterCheckBuilder[ResultCode] = new DiameterCheckBuilder(new StatusResultCodeExtractor)
+
+  def status: DiameterCheckBuilder[Long] = new DiameterCheckBuilder(new StatusExtractor)
+
   val originHost: DiameterCheckBuilder[OriginHost] = new DiameterCheckBuilder(new AvpExtractor[OriginHost](OriginHost.CODE))
   val originRealm: DiameterCheckBuilder[OriginRealm] = new DiameterCheckBuilder(new AvpExtractor[OriginRealm](OriginRealm.CODE))
 
@@ -26,7 +31,6 @@ trait DiameterCheckSupport {
  */
 private[check] final class StatusExtractor extends Extractor[DiameterAnswer, Long] {
   override def name: String = "status"
-
   override def arity: String = "find"
 
   override def apply(answer: DiameterAnswer): Validation[Option[Long]] = {
@@ -41,6 +45,34 @@ private[check] final class StatusExtractor extends Extractor[DiameterAnswer, Lon
     }, rc => {
       rc.getAsEnum.map[Long](e => e.getCode).orElse(-1L)
     })
+    Option(actual).success
+  }
+}
+
+private[check] final class StatusExperimentalResultCodeExtractor extends Extractor[DiameterAnswer, ExperimentalResultCode] {
+  override def name: String = "status"
+
+  override def arity: String = "find"
+
+  override def apply(answer: DiameterAnswer): Validation[Option[ExperimentalResultCode]] = {
+    val actual = answer.getResultCode.fold[ExperimentalResultCode](erc => {
+      erc.getAvps.stream
+        .filter((avp: FramedAvp) => ExperimentalResultCode.CODE == avp.getCode)
+        .findFirst
+        .orElseThrow(() => new RuntimeException("Expected to find " + classOf[ExperimentalResultCode].getName))
+        .ensure().toExperimentalResultCode
+    }, _ => null)
+    Option(actual).success
+  }
+}
+
+private[check] final class StatusResultCodeExtractor extends Extractor[DiameterAnswer, ResultCode] {
+  override def name: String = "status"
+
+  override def arity: String = "find"
+
+  override def apply(answer: DiameterAnswer): Validation[Option[ResultCode]] = {
+    val actual = answer.getResultCode.fold[ResultCode](_ => null, rc => rc.toResultCode)
     Option(actual).success
   }
 }
