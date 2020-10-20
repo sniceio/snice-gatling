@@ -15,7 +15,7 @@ class UlrSimulation extends Simulation {
   var peerConfig = new PeerConfiguration();
   peerConfig.setName("hss")
   peerConfig.setMode(Peer.MODE.ACTIVE)
-  peerConfig.setUri(new URI("aaa://10.36.10.77:3868"))
+  peerConfig.setUri(new URI("aaa://10.36.10.74:3868"))
 
   var diameterProtocol = diameter
     .originHost("abc.node.epc.mnc001.mcc001.3gppnetwork.org")
@@ -24,13 +24,14 @@ class UlrSimulation extends Simulation {
 
 
   // val scn = scenario("Update Location Request")
-    // .pause(400.milliseconds)
-      // .exec(diameter("Basic Happy Scenario").ulr("99900199999"))
+  // .pause(400.milliseconds)
+  // .exec(diameter("Basic Happy Scenario").ulr("99900199999"))
 
   // setUp(scn.inject(atOnceUsers(3)).protocols(diameterProtocol))
   // setUp(UpdateLocation.basicAttach.inject(rampUsers(10) during 2.seconds))
   // setUp(UpdateLocation.basicAttach2.inject(atOnceUsers(1),rampUsers(10).during(20.seconds)))
 
+  // setUp(FullAttachmentScenario.basicAttach.inject(atOnceUsers(1),
   setUp(FullAttachmentScenario.basicAttach.inject(atOnceUsers(1),
     // rampUsers(10).during(10.seconds),
     // constantUsersPerSec(10).during(10.seconds),

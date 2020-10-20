@@ -12,6 +12,6 @@ trait DiameterDsl extends DiameterCheckSupport {
     DiameterProtocolBuilder(configuration)
   }
 
-  def diameter2(requestName: Expression[String]): Diameter = Diameter(requestName)
+  def diameter(requestName: Expression[String]): Diameter = Diameter(requestName)
 
 }

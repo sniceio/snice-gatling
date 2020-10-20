@@ -11,13 +11,13 @@ object UpdateLocationRequest {
   val msidn = Msisdn.of("123456789")
 
   /**
-    * Try and attach but "forget" to include the IMSI in the request. I.e., no User-Name AVP
-    */
-  val ulrNoImsi = diameter2("Attach with no IMSI")
+   * Try and attach but "forget" to include the IMSI in the request. I.e., no User-Name AVP
+   */
+  val ulrNoImsi = diameter("Attach with no IMSI")
     .ulr(None)
     .originHost("${originHost}")
     .originRealm("${originRealm}")
-    // .check(status.is(5001))
+  // .check(status.is(5001))
 
   // TODO: make some nice support for ULR Flags.
   val b = WritableBuffer.of(4)
@@ -26,15 +26,19 @@ object UpdateLocationRequest {
   b.setBit(3, 2, true)
   val ulrFlags = UlrFlags.of(b.build())
 
+  val vplmnId = WritableBuffer.of(3).fastForwardWriterIndex
+  val vplmn = VisitedPlmnId.of(vplmnId.build())
+
   /**
    * This is a regular normal ULR with no fuzz or strangeness of any kind.
    *
-   * It will perform the following checks:
+   * Add the necessary checks you want to this base ULR
+   *
    * <ul>
-   *   <li>Ensure the answer is a 2001</li>
+   * <li>Ensure the answer is a 2001</li>
    * </ul>
    */
-  val ulr = diameter2("Attach")
+  val ulrBase = diameter("Attach")
     .ulr("${imsi}")
     .originHost("${originHost}")
     .originRealm("${originRealm}")
@@ -44,25 +48,31 @@ object UpdateLocationRequest {
     .avp(RatType.Eutran)
     .avp(ulrFlags)
     .avp(msidn)
-    .avp("apa2")
-    .avp("dsa")
-    .avp("oi-replacement")
-    .check(status.is(2001))
-    // .check(avp(OriginHost.CODE).saveAs("remoteHost"))
-    // .check(avp(OriginHost.CODE).is("some value").saveAs("remoteHost"))
+    .avp(vplmn)
+  // .avp("apa2")
+  // .avp("dsa")
+  // .avp("oi-replacement")
+  // .check(status.is(2001))
+  // .check(status.is(ExperimentalResultCode.DiameterErrorUserUnknown5001.getAsEnum.get.getCode).saveAs("fup"))
+  // .check(avp(OriginHost.CODE).saveAs("remoteHost"))
+  // .check(avp(OriginHost.CODE).is("some value").saveAs("remoteHost"))
 
-  val ulr2 = diameter2("Attach2")
-    .ulr("${imsi}")
-    .originHost("${originHost}")
-    .originRealm("${originRealm}")
-    .originRealm("${originRealm}")
-    .destinationHost("${remoteHost}")
-    .destinationRealm("${destinationRealm}")
-    .sessionId("${sessionId}")
-    .avp(AuthSessionState.NoStateMaintained)
-    .avp(RatType.Eutran)
-    .avp(ulrFlags)
-    .avp(msidn)
-    .check(status.is(2001))
+  /**
+   * Just adding some basic check to the very basic and boring base ULR
+   *
+   * <ul>
+   * <li>Ensure the answer is a 2001</li>
+   * </ul>
+   */
+  val ulr = ulrBase
+    .check(status.is(ResultCode.DiameterSuccess2001.getResultCode))
+
+  /**
+   * This one assumes that the IMSI we used isn't provisioned in the HSS
+   * and as such, we do expect a 5001 back.
+   *
+   */
+  val ulrUserUnknown = ulrBase
+    .check(status.is(ExperimentalResultCode.DiameterErrorUserUnknown5001.getResultCode))
 
 }
