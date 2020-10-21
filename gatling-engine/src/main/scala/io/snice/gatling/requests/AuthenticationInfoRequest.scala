@@ -1,7 +1,7 @@
 package io.snice.gatling.requests
 
 import io.gatling.core.Predef._
-import io.snice.buffer.WritableBuffer
+import io.snice.codecs.codec.diameter.MccMnc
 import io.snice.codecs.codec.diameter.avp.api._
 import io.snice.gatling.diameter.Predef._
 
@@ -14,8 +14,9 @@ object AuthenticationInfoRequest {
   val eUtran = RequestedEutranAuthenticationInfo.of(NumberOfRequestedVectors.of(1), ImmediateResponsePreferred.of(1))
   val uTranGeran = RequestedUtranGeranAuthenticationInfo.of(NumberOfRequestedVectors.of(3), ImmediateResponsePreferred.of(1))
 
-  val vplmnId = WritableBuffer.of(3).fastForwardWriterIndex
-  val vplmn = VisitedPlmnId.of(vplmnId.build())
+  // val vplmnId = WritableBuffer.of(3).fastForwardWriterIndex
+  val mccMnc = MccMnc.parse("130/110");
+  val vplmn = VisitedPlmnId.of(mccMnc.toBuffer);
 
   val expectedOiReplacement: ApnOiReplacement = ApnOiReplacement.of("hello.apn.mcc123.mcc123.gprs")
 

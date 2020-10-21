@@ -49,8 +49,8 @@
 
         <!-- All diameter related functionality is provided by snice.io -->
         <io.snice.commons.version>0.1.5</io.snice.commons.version>
-        <io.snice.codecs.version>0.0.1</io.snice.codecs.version>
-        <io.snice.networking.version>0.0.1</io.snice.networking.version>
+        <io.snice.codecs.version>0.0.2</io.snice.codecs.version>
+        <io.snice.networking.version>0.0.2</io.snice.networking.version>
 
         <gatling.version>3.3.1</gatling.version>
         <gatling-maven-plugin.version>3.0.5</gatling-maven-plugin.version>
