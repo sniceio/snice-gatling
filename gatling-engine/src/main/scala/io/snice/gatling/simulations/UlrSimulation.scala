@@ -8,6 +8,9 @@ import io.snice.gatling.diameter.Predef._
 import io.snice.gatling.scenarios.FullAttachmentScenario
 import io.snice.networking.diameter.peer.{Peer, PeerConfiguration}
 
+import scala.concurrent.duration._
+
+
 class UlrSimulation extends Simulation {
 
   // Do some kind of service discovery here...
@@ -33,8 +36,8 @@ class UlrSimulation extends Simulation {
 
   // setUp(FullAttachmentScenario.basicAttach.inject(atOnceUsers(1),
   setUp(FullAttachmentScenario.basicAttach.inject(atOnceUsers(1),
-    // rampUsers(10).during(10.seconds),
-    // constantUsersPerSec(10).during(10.seconds),
+    // rampUsers(2).during(10.seconds),
+    // constantUsersPerSec(2).during(10.seconds),
     // rampUsersPerSec(10) to 100 during (1.minutes),
     // constantUsersPerSec(100).during(1.minutes),
     // rampUsersPerSec(300) to 600 during (1.minutes),

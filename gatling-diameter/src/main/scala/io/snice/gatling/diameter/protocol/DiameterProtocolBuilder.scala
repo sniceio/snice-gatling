@@ -41,9 +41,7 @@ case class DiameterProtocolBuilder(config: DiameterConfig) {
   }
 
   def peer(peerConfig: PeerConfiguration): DiameterProtocolBuilder = {
-    println("DiameterProtocolBuilder: " + peerConfig)
     peers += peerConfig
-    println("DiameterProtocolBuilder: no of peers" + peers.size)
     this
   }
 

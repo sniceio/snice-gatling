@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit
 
 import io.snice.codecs.codec.diameter.DiameterRequest
 import io.snice.gatling.diameter.protocol.DiameterConfig
-import io.snice.networking.diameter.peer.{Peer, PeerUnavailableException}
+import io.snice.networking.diameter.peer.{Peer, PeerConfiguration, PeerUnavailableException}
 import io.snice.networking.diameter.tx.Transaction
 
 import scala.collection.mutable.ListBuffer
@@ -24,8 +24,15 @@ class DiameterEngine(config: DiameterConfig, stack: DiameterStack) {
 
   var peer: Peer = _
 
-  def start(): Unit = {
+  def start(additionalPeers: List[PeerConfiguration]): Unit = {
+
     stack.start()
+    additionalPeers.foreach(p => {
+      // Hack because we don't handle it properly below...
+      p.setMode(Peer.MODE.PASSIVE)
+      stack.addPeer(p)
+    })
+
     val peers = new ListBuffer[Peer]()
     stack.peers().foreach(p => {
       try {
@@ -39,6 +46,7 @@ class DiameterEngine(config: DiameterConfig, stack: DiameterStack) {
       }
     })
 
+    // TODO: not correct. Good enough for now...
     peer = peers(0)
   }
 
