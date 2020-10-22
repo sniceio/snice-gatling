@@ -11,7 +11,7 @@
     <name>Snice Gatling</name>
     <groupId>io.snice.gatling</groupId>
     <artifactId>snice-gatling-parent</artifactId>
-    <version>0.0.4-SNAPSHOT</version>
+    <version>0.0.4</version>
     <packaging>pom</packaging>
     <description>Snice Gatling</description>
 
