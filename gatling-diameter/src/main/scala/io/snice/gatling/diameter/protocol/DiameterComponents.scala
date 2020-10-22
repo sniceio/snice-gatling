@@ -9,7 +9,7 @@ final case class DiameterComponents(protocol: DiameterProtocol,
   extends ProtocolComponents {
 
   override def onStart: Session => Session = {
-    engine.start()
+    engine.start(protocol.peers)
     ProtocolComponents.NoopOnStart
   }
   override def onExit: Session => Unit = ProtocolComponents.NoopOnExit

@@ -2,9 +2,9 @@ package io.snice.gatling.diameter.engine
 
 import io.snice.codecs.codec.diameter.avp.api._
 import io.snice.codecs.codec.diameter.{DiameterAnswer, DiameterMessage}
-import io.snice.networking.diameter.event.DiameterEvent
-import io.snice.networking.diameter.peer.Peer
 import io.snice.networking.diameter._
+import io.snice.networking.diameter.event.DiameterEvent
+import io.snice.networking.diameter.peer.{Peer, PeerConfiguration}
 
 import scala.collection.JavaConverters._
 
@@ -31,6 +31,8 @@ class DiameterStack(config: DiameterStackConfig, bundle: DiameterBundle[Diameter
       b.`match`(msg => msg.isULA).consume((con, msg) => processULA(con, msg));
     })
   }
+
+  def addPeer(config: PeerConfiguration): Peer = environment.addPeer(config)
 
   override def run(config: DiameterStackConfig, environment: DiameterEnvironment[DiameterStackConfig]): Unit = {
     this.environment = environment

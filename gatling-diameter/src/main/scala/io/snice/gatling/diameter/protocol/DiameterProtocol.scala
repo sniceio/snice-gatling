@@ -32,7 +32,7 @@ object DiameterProtocol {
   }
 
   def apply(configuration: DiameterConfig, peers: List[PeerConfiguration]): DiameterProtocol = {
-    println("DiameterProtocol.apply(config: DiameterConfig, peers: List)")
+    println("DiameterProtocol.apply(config: DiameterConfig, peers: List) " + peers)
     new DiameterProtocol(configuration, peers)
   }
 
