@@ -48,9 +48,9 @@
         <scala-test.version>3.2.0</scala-test.version>
 
         <!-- All diameter related functionality is provided by snice.io -->
-        <io.snice.commons.version>0.1.5</io.snice.commons.version>
-        <io.snice.codecs.version>0.0.2</io.snice.codecs.version>
-        <io.snice.networking.version>0.0.2</io.snice.networking.version>
+        <io.snice.commons.version>0.1.6</io.snice.commons.version>
+        <io.snice.codecs.version>0.0.3-SNAPSHOT</io.snice.codecs.version>
+        <io.snice.networking.version>0.0.6-SNAPSHOT</io.snice.networking.version>
 
         <gatling.version>3.3.1</gatling.version>
         <gatling-maven-plugin.version>3.0.5</gatling-maven-plugin.version>
@@ -68,6 +68,7 @@
     <modules>
         <module>gatling-engine</module>
         <module>gatling-diameter</module>
+        <module>gatling-gtp</module>
     </modules>
 
     <dependencyManagement>
@@ -75,6 +76,13 @@
             <dependency>
                 <groupId>io.snice.gatling</groupId>
                 <artifactId>snice-gatling-diameter</artifactId>
+                <version>${project.version}</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>io.snice.gatling</groupId>
+                <artifactId>snice-gatling-gtp</artifactId>
                 <version>${project.version}</version>
                 <scope>compile</scope>
             </dependency>
@@ -127,6 +135,14 @@
             </dependency>
 
             <dependency>
+                <groupId>io.snice.codecs</groupId>
+                <artifactId>codec-gtp</artifactId>
+                <version>${io.snice.codecs.version}</version>
+                <type>jar</type>
+                <scope>compile</scope>
+            </dependency>
+
+            <dependency>
                 <groupId>io.snice.networking</groupId>
                 <artifactId>networking-app</artifactId>
                 <version>${io.snice.networking.version}</version>
@@ -137,6 +153,14 @@
             <dependency>
                 <groupId>io.snice.networking</groupId>
                 <artifactId>diameter-stack</artifactId>
+                <version>${io.snice.networking.version}</version>
+                <type>jar</type>
+                <scope>compile</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>io.snice.networking</groupId>
+                <artifactId>gtp-stack</artifactId>
                 <version>${io.snice.networking.version}</version>
                 <type>jar</type>
                 <scope>compile</scope>

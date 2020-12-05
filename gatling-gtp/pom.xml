@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.snice.gatling</groupId>
+        <artifactId>snice-gatling-parent</artifactId>
+        <version>0.0.5-SNAPSHOT</version>
+    </parent>
+
+    <name>Snice Gatling GTP Support</name>
+    <artifactId>snice-gatling-gtp</artifactId>
+    <packaging>jar</packaging>
+    <description />
+
+    <dependencies>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.gatling.highcharts</groupId>
+            <artifactId>gatling-charts-highcharts</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.gatling</groupId>
+            <artifactId>gatling-app</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.gatling</groupId>
+            <artifactId>gatling-recorder</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.snice</groupId>
+            <artifactId>snice-commons</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.snice.codecs</groupId>
+            <artifactId>codec-gtp</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.snice.networking</groupId>
+            <artifactId>networking-app</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.snice.networking</groupId>
+            <artifactId>gtp-stack</artifactId>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.softwaremill.quicklens/quicklens -->
+        <dependency>
+            <groupId>com.softwaremill.quicklens</groupId>
+            <artifactId>quicklens_${scala.major.minor.version}</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jdk8</artifactId>
+            </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-scala_${scala.major.minor.version}</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_${scala.major.minor.version}</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

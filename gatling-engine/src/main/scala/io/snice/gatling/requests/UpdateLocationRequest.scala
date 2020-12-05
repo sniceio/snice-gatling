@@ -2,6 +2,7 @@ package io.snice.gatling.requests
 
 import io.gatling.core.Predef._
 import io.snice.buffer.WritableBuffer
+import io.snice.codecs.codec.MccMnc
 import io.snice.codecs.codec.diameter.avp.api._
 import io.snice.gatling.diameter.Predef._
 
@@ -26,8 +27,8 @@ object UpdateLocationRequest {
   b.setBit(3, 2, true)
   val ulrFlags = UlrFlags.of(b.build())
 
-  val vplmnId = WritableBuffer.of(3).fastForwardWriterIndex
-  val vplmn = VisitedPlmnId.of(vplmnId.build())
+  val mccMnc = MccMnc.parse("130/110");
+  val vplmn = VisitedPlmnId.of(mccMnc.toBuffer);
 
   /**
    * This is a regular normal ULR with no fuzz or strangeness of any kind.
@@ -66,6 +67,8 @@ object UpdateLocationRequest {
    */
   val ulr = ulrBase
     .check(status.is(ResultCode.DiameterSuccess2001.getResultCode))
+
+  val ulrNoChecks = ulrBase
 
   /**
    * This one assumes that the IMSI we used isn't provisioned in the HSS
