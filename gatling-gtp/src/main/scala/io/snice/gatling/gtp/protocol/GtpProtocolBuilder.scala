@@ -9,12 +9,14 @@ object GtpProtocolBuilder {
   }
 
   def apply(configuration: GatlingConfiguration): GtpProtocolBuilder = {
-    new GtpProtocolBuilder(GtpConfig(configuration))
+    println("Creating new GtpProtocolBuilder")
+    GtpProtocolBuilder(GtpConfig(configuration))
   }
 
   case class GtpProtocolBuilder(config: GtpConfig) {
 
     def build = {
+      println("Building GTP Protocol")
       GtpProtocol(config)
     }
   }

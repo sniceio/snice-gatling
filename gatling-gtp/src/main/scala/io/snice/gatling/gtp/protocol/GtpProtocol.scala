@@ -3,6 +3,7 @@ package io.snice.gatling.gtp.protocol
 import io.gatling.core.config.GatlingConfiguration
 import io.gatling.core.protocol.{Protocol, ProtocolKey}
 import io.gatling.core.{CoreComponents, protocol}
+import io.snice.gatling.gtp.engine.{GtpEngine, GtpEngineConfig}
 
 object GtpProtocol {
 
@@ -15,7 +16,9 @@ object GtpProtocol {
 
     override def newComponents(coreComponents: CoreComponents): GtpProtocol => GtpComponents = {
       protocol => {
-        GtpComponents(protocol)
+        val gtpEngineConf = GtpEngineConfig(protocol.gtpConfig)
+        val engine = GtpEngine(gtpEngineConf)
+        GtpComponents(protocol, engine)
       }
 
     }

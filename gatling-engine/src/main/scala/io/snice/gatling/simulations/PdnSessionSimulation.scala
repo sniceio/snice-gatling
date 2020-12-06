@@ -8,5 +8,5 @@ class PdnSessionSimulation extends Simulation {
 
   var gtpProtocol = gtp
 
-  setUp(PdnAttachScenario.basicPdnSession.inject(atOnceUsers(1))).protocols(gtp)
+  setUp(PdnAttachScenario.basicPdnSession.inject(atOnceUsers(1))).protocols(gtpProtocol)
 }
