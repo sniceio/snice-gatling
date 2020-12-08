@@ -1,7 +1,7 @@
 package io.snice.gatling.gtp.request
 
+import com.softwaremill.quicklens._
 import io.gatling.core.session.{Expression, Session}
-import io.snice.codecs.codec.gtp.gtpc.v2.Impl.Gtp2MessageBuilder
 import io.snice.codecs.codec.gtp.gtpc.v2.`type`.GtpType
 import io.snice.codecs.codec.gtp.gtpc.v2.messages.tunnel.CreateSessionRequest
 import io.snice.codecs.codec.gtp.gtpc.v2.tliv.TypeLengthInstanceValue
@@ -17,6 +17,7 @@ object GtpRequestBuilder {
 }
 
 final case class GtpAttributes[T <: Gtp2Message](imsi: Option[Expression[String]],
+                                                 randomSeqNo: Boolean,
                                                  gtpType: GtpRequestType[T],
                                                  tlivs: List[GtpTliv]
                                                 )
@@ -34,16 +35,22 @@ object GtpRequestType {
 
 final case class GtpRequestType[T <: Gtp2Message](gtpHeader: Gtp2Header)
 
-
 case class GtpRequestBuilder[T <: Gtp2Message](requestName: Expression[String], gtpAttributes: GtpAttributes[T]) {
+
+  def tliv(tliv: TypeLengthInstanceValue[_ <: GtpType]): GtpRequestBuilder[T] = this.modify(_.gtpAttributes.tlivs).using(_ ::: List(GtpTlivDirect(tliv)))
+
+  def randomSeqNo(): GtpRequestBuilder[T] = this.modify(_.gtpAttributes.randomSeqNo).using(_ => true)
 
   def build(): GtpRequestDef[T] = {
     val imsi = gtpAttributes.imsi
     val tlivs = gtpAttributes.tlivs
-    val builder: Gtp2MessageBuilder[T] = Gtp2Message.create(gtpAttributes.gtpType.gtpHeader)
+    val seqNo = gtpAttributes.randomSeqNo
 
-    GtpRequestDef[T](requestName, imsi, tlivs, builder)
+    GtpRequestDef[T](requestName, imsi, seqNo, tlivs, gtpAttributes.gtpType)
   }
 }
 
+final case class GtpTlivDirect(tliv: TypeLengthInstanceValue[_ <: GtpType]) extends GtpTliv {
+  override def apply(session: Session) = Right(tliv.asInstanceOf[TypeLengthInstanceValue[GtpType]])
+}
 

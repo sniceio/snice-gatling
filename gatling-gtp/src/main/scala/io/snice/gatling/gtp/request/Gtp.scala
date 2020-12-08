@@ -11,6 +11,6 @@ final case class Gtp(requestName: Expression[String]) {
   def csr(imsi: Option[Expression[String]]): GtpRequestBuilder[CreateSessionRequest] = request(imsi, GtpRequestType.csr)
 
   def request[T <: Gtp2Message](imsi: Option[Expression[String]], req: GtpRequestType[T]): GtpRequestBuilder[T] =
-    GtpRequestBuilder(requestName, GtpAttributes(imsi, req, List.empty))
+    GtpRequestBuilder(requestName, GtpAttributes(imsi, false, req, List.empty))
 
 }

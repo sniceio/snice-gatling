@@ -13,10 +13,10 @@ object GtpEngineConfig {
    *
    * Normally, we would just have read this from a yaml file (ala Dropwizard) and it would have been
    * much nicer but here we need to build parts of it up ourselves. If you have a better approach
-   * to this, please issue a pull request!!! I ran out of ideas...
+   * to this, please issue a pull request!!! I ran out of ideas... it's quite annoying...
    */
   def apply(config: GtpConfig): GtpEngineConfig = {
-    val conf = new GtpEngineConfig()
+    val conf = new GtpEngineConfig(config.remoteAddress, config.remotePort, config.remoteNattedAddress, config.localNattedAddress)
     conf.setNetworkInterfaces(config.interfaces.asJava)
     val gtpAppGtpConfig = conf.getConfig
     gtpAppGtpConfig.setUserPlane(config.userPlane)
@@ -30,4 +30,7 @@ object GtpEngineConfig {
  * Glue configuration between Gatling's way of configuring and the configuration
  * needed by snice.io networking application.
  */
-class GtpEngineConfig extends GtpAppConfig {}
+case class GtpEngineConfig(remoteAddress: String,
+                           remotePort: Int,
+                           remoteNattedAddress: Option[String],
+                           localNattedAddress: Option[String]) extends GtpAppConfig {}

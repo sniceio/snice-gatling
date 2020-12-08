@@ -14,7 +14,7 @@ class GtpRequestActionBuilder[T <: Gtp2Message](requestBuilder: GtpRequestBuilde
     val statsEngine = ctx.coreComponents.statsEngine
     val clock = ctx.coreComponents.clock
     val gtpRequestDef = requestBuilder.build
-    GtpRequestAction(gtpRequestDef, clock, statsEngine, next)
+    GtpRequestAction(gtpRequestDef, gtp.engine, clock, statsEngine, next)
   }
 
 }

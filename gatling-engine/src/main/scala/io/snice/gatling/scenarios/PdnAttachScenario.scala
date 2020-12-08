@@ -12,6 +12,5 @@ object PdnAttachScenario {
   val basicPdnSession = scenario("Full PDN Session Scenario")
     .feed(feeder)
     .exec(CreateSessionRequest.csrBase)
-    .pause(60 seconds)
 
 }

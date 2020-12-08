@@ -17,10 +17,10 @@ object FullAttachmentScenario {
 
   val basicAttach = scenario("Full Attach")
     .feed(feeder)
-    .exec{ session =>
+    .exec { session =>
       session.set("sessionId", "blah-" + Random.nextInt(10000))
     }.exec(AuthenticationInfoRequest.air)
-    // .exec(session => session.markAsSucceeded) // if you don't want a failure to propagate to the next procedure
+    .exec(session => session.markAsSucceeded) // if you don't want a failure to propagate to the next procedure
     .pause(1.seconds)
     // .exec(session => {
       // println("has it been saved?")

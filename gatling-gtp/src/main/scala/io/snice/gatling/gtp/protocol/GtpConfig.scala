@@ -87,5 +87,11 @@ object GtpConfig {
   }
 }
 
-final case class GtpConfig(interfaces: List[NetworkInterfaceConfiguration], userPlane: UserPlaneConfig, controlPlane: ControlPlaneConfig)
+final case class GtpConfig(interfaces: List[NetworkInterfaceConfiguration],
+                           userPlane: UserPlaneConfig,
+                           controlPlane: ControlPlaneConfig,
+                           remoteAddress: String,
+                           remotePort: Int,
+                           remoteNattedAddress: Option[String],
+                           localNattedAddress: Option[String])
 
