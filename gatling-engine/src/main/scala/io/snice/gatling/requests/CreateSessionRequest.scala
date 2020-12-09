@@ -38,5 +38,6 @@ object CreateSessionRequest {
     .senderFTeid("107.20.226.156")
     .bearerFteid("107.20.226.156")
     .bearerEpsId(5)
+    .check(cause.is(16).saveAs("cause_value"))
 
 }

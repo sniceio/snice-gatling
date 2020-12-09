@@ -9,6 +9,7 @@ import io.snice.codecs.codec.gtp.gtpc.v2.tliv._
 import io.snice.codecs.codec.gtp.gtpc.v2.{Gtp2Header, Gtp2HeaderBuilder, Gtp2Message, Gtp2MessageType}
 import io.snice.codecs.codec.tgpp.ReferencePoint
 import io.snice.gatling.gtp.action.GtpRequestActionBuilder
+import io.snice.gatling.gtp.check.GtpCheck
 
 object GtpRequestBuilder {
 
@@ -24,7 +25,8 @@ final case class GtpAttributes[T <: Gtp2Message](imsi: Option[Expression[String]
                                                  senderFTeid: Option[FTeidAttributes],
                                                  bearerContext: Option[BearerContextAttributes],
                                                  gtpType: GtpRequestType[T],
-                                                 tlivs: List[GtpTliv]
+                                                 tlivs: List[GtpTliv],
+                                                 checks: List[GtpCheck] = Nil,
                                                 )
 
 trait GtpTliv {
@@ -65,6 +67,8 @@ case class GtpRequestBuilder[T <: Gtp2Message](requestName: Expression[String], 
   def pdnType(pdnType: PdnType.Type): GtpRequestBuilder[T] = tliv(Pdn.ofValue(PdnType.of(pdnType)))
 
   def pdnAddressAllocation(ipv4Address: String): GtpRequestBuilder[T] = tliv(Paa.ofValue(PaaType.fromIPv4(ipv4Address)))
+
+  def check(checks: GtpCheck*): GtpRequestBuilder[T] = this.modify(_.gtpAttributes.checks).using(_ ::: checks.toList)
 
   /**
    * Create a Sender FTeid with the given IPv4 address and a randomized Teid will be created
@@ -125,7 +129,7 @@ case class GtpRequestBuilder[T <: Gtp2Message](requestName: Expression[String], 
     val seqNo = gtpAttributes.randomSeqNo
     val teid = gtpAttributes.teid
 
-    GtpRequestDef[T](requestName, imsi, teid, seqNo, fteid ::: bearer ::: tlivs, gtpAttributes.gtpType)
+    GtpRequestDef[T](requestName, gtpAttributes.checks, imsi, teid, seqNo, fteid ::: bearer ::: tlivs, gtpAttributes.gtpType)
   }
 }
 

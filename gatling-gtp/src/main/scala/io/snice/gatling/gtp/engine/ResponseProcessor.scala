@@ -2,15 +2,17 @@ package io.snice.gatling.gtp.engine
 
 import io.gatling.commons.util.Clock
 import io.gatling.core.action.Action
+import io.gatling.core.check.Check
 import io.gatling.core.session.Session
 import io.gatling.core.stats.StatsEngine
 import io.snice.codecs.codec.gtp.gtpc.v2.{Gtp2Request, Gtp2Response}
+import io.snice.gatling.gtp.check.GtpCheck
 import io.snice.networking.gtp.Transaction
 
 object ResponseProcessor {
 
-  def apply(name: String, req: Gtp2Request, session: Session, statsEngine: StatsEngine, clock: Clock, next: Action): ResponseProcessor = {
-    new ResponseProcessor(name, req, session, statsEngine, clock, next)
+  def apply(name: String, req: Gtp2Request, checks: List[GtpCheck], session: Session, statsEngine: StatsEngine, clock: Clock, next: Action): ResponseProcessor = {
+    new ResponseProcessor(name, req, checks, session, statsEngine, clock, next)
   }
 
 }
@@ -28,7 +30,7 @@ object ResponseProcessor {
  */
 class ResponseProcessor(name: String,
                         req: Gtp2Request,
-                        // checks: List[DiameterCheck], // will get to this
+                        checks: List[GtpCheck],
                         session: Session,
                         statsEngine: StatsEngine,
                         clock: Clock,
@@ -38,14 +40,13 @@ class ResponseProcessor(name: String,
   def process(transaction: Transaction, response: Gtp2Response): Unit = {
     val responseStopTime = clock.nowMillis
 
-    // TODO: implement checks...
-    // val (checkedSession, checkError) = Check.check(answer, session, checks, null)
-    // val newSession = if (checkError.isDefined) checkedSession.markAsFailed else checkedSession
+    val (checkedSession, checkError) = Check.check(response, session, checks, null)
+    val newSession = if (checkError.isDefined) checkedSession.markAsFailed else checkedSession
 
     val message = None
     val responseCode = None
-    statsEngine.logResponse(session, name, start, responseStopTime, session.status, responseCode, message)
+    statsEngine.logResponse(newSession, name, start, responseStopTime, newSession.status, responseCode, message)
 
-    next ! session
+    next ! newSession
   }
 }

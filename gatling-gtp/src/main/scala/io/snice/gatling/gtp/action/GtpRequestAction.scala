@@ -51,7 +51,7 @@ case class GtpRequestAction[T <: Gtp2Message](reqDef: GtpRequestDef[T],
     val name = reqDef.requestName.apply(session).toOption.get
 
     val transaction = engine.createNewTransaction(request)
-    val responseProcessor = ResponseProcessor(name, request, session, statsEngine, clock, next)
+    val responseProcessor = ResponseProcessor(name, request, reqDef.checks, session, statsEngine, clock, next)
     transaction.onAnswer(responseProcessor.process).start
   }
 

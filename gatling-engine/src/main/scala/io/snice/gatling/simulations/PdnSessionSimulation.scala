@@ -25,7 +25,7 @@ class PdnSessionSimulation extends Simulation {
     .remoteNattedAddress("52.90.72.87")
 
   setUp(PdnAttachScenario.basicPdnSession.inject(atOnceUsers(1),
-    constantUsersPerSec(1).during(60.seconds),
+    // constantUsersPerSec(1).during(60.seconds),
     // rampUsersPerSec(10) to 100 during (1.minutes),
     // constantUsersPerSec(100).during(1.minutes),
   )).protocols(gtpProtocol)
