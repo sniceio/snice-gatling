@@ -4,8 +4,6 @@ import io.gatling.core.Predef._
 import io.snice.gatling.gtp.Predef._
 import io.snice.gatling.scenarios.PdnAttachScenario
 
-import scala.concurrent.duration._
-
 class PdnSessionSimulation extends Simulation {
 
   var gtpProtocol = gtp
@@ -22,7 +20,7 @@ class PdnSessionSimulation extends Simulation {
     // The NAT:ed address of the server we are testing. It may be that the server under test, such as a
     // PGW is behind a NAT (compared to you) and when you establish a GTP tunnel you need to hit this
     // reachable IP address (again, from your perspective).
-    .remoteNattedAddress("52.90.72.87")
+    .remoteNattedAddress("3.80.71.132")
 
   setUp(PdnAttachScenario.basicPdnSession.inject(atOnceUsers(1),
     // constantUsersPerSec(1).during(60.seconds),

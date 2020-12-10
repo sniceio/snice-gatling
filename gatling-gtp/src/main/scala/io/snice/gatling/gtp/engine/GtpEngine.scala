@@ -1,5 +1,8 @@
 package io.snice.gatling.gtp.engine
 
+import java.net.InetSocketAddress
+
+import io.snice.codecs.codec.gtp.gtpc.v1.Gtp1Message
 import io.snice.codecs.codec.gtp.gtpc.v2.Gtp2Request
 import io.snice.networking.gtp._
 
@@ -25,8 +28,12 @@ class GtpEngine(config: GtpEngineConfig) extends GtpApplication[GtpEngineConfig]
 
   override def initialize(bootstrap: GtpBootstrap[GtpEngineConfig]): Unit = {
     bootstrap.onConnection(id => true).accept(b => {
-      b.`match`(event => event.isCreateSessionRequest).consume((con, event) => println("CSR"))
+      b.`match`(event => event.isPdu).consume((tunnel, pdu) => processPdu(tunnel, pdu.toGtp1Message))
     })
+  }
+
+  def processPdu(tunnel: GtpTunnel, pdu: Gtp1Message) = {
+    println("yay, got back a PDU")
   }
 
   override def run(config: GtpEngineConfig, environment: GtpEnvironment[GtpEngineConfig]): Unit = {
@@ -50,5 +57,11 @@ class GtpEngine(config: GtpEngineConfig) extends GtpApplication[GtpEngineConfig]
    * @return a new [[Transaction.Builder ]]
    */
   def createNewTransaction(request: Gtp2Request): Transaction.Builder = tunnel.createNewTransaction(request)
+
+  def establishGtpUserTunnel(address: String): GtpUserTunnel = {
+    // TODO: for now, cheating to keep it simple...
+    val remote = new InetSocketAddress(address, 2152)
+    environment.establishUserPlane(remote).toCompletableFuture.get
+  }
 
 }

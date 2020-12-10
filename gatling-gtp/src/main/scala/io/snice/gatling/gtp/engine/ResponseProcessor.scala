@@ -6,8 +6,9 @@ import io.gatling.core.check.Check
 import io.gatling.core.session.Session
 import io.gatling.core.stats.StatsEngine
 import io.snice.codecs.codec.gtp.gtpc.v2.{Gtp2Request, Gtp2Response}
+import io.snice.gatling.gtp.action.GtpRequestAction
 import io.snice.gatling.gtp.check.GtpCheck
-import io.snice.networking.gtp.Transaction
+import io.snice.networking.gtp.{PdnSessionContext, Transaction}
 
 object ResponseProcessor {
 
@@ -47,6 +48,15 @@ class ResponseProcessor(name: String,
     val responseCode = None
     statsEngine.logResponse(newSession, name, start, responseStopTime, newSession.status, responseCode, message)
 
-    next ! newSession
+    val req = transaction.getRequest
+
+    val nextSession = if (req.isCreateSessionRequest) {
+      val ctx = PdnSessionContext.of(req.toGtp2Message.toCreateSessionRequest, response)
+      newSession.set(GtpRequestAction.PDN_SESSION_CTX_KEY, ctx)
+    } else {
+      newSession
+    }
+
+    next ! nextSession
   }
 }

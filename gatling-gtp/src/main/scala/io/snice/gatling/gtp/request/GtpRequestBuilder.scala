@@ -6,7 +6,7 @@ import io.snice.codecs.codec.gtp.Teid
 import io.snice.codecs.codec.gtp.gtpc.v2.`type`._
 import io.snice.codecs.codec.gtp.gtpc.v2.messages.tunnel.CreateSessionRequest
 import io.snice.codecs.codec.gtp.gtpc.v2.tliv._
-import io.snice.codecs.codec.gtp.gtpc.v2.{Gtp2Header, Gtp2HeaderBuilder, Gtp2Message, Gtp2MessageType}
+import io.snice.codecs.codec.gtp.gtpc.v2.{Gtp2Message, Gtp2MessageType}
 import io.snice.codecs.codec.tgpp.ReferencePoint
 import io.snice.gatling.gtp.action.GtpRequestActionBuilder
 import io.snice.gatling.gtp.check.GtpCheck
@@ -19,15 +19,16 @@ object GtpRequestBuilder {
 
 }
 
-final case class GtpAttributes[T <: Gtp2Message](imsi: Option[Expression[String]],
-                                                 teid: Option[Teid],
-                                                 randomSeqNo: Boolean,
-                                                 senderFTeid: Option[FTeidAttributes],
-                                                 bearerContext: Option[BearerContextAttributes],
-                                                 gtpType: GtpRequestType[T],
-                                                 tlivs: List[GtpTliv],
-                                                 checks: List[GtpCheck] = Nil,
-                                                )
+
+final case class GtpAttributes[+T <: Gtp2Message](imsi: Option[Expression[String]],
+                                                  teid: Option[Teid],
+                                                  randomSeqNo: Boolean,
+                                                  senderFTeid: Option[FTeidAttributes],
+                                                  bearerContext: Option[BearerContextAttributes],
+                                                  gtpType: GtpRequestType[T],
+                                                  tlivs: List[GtpTliv],
+                                                  checks: List[GtpCheck] = Nil,
+                                                 )
 
 trait GtpTliv {
   def apply(session: Session): Either[String, TypeLengthInstanceValue[GtpType]]
@@ -35,14 +36,15 @@ trait GtpTliv {
 
 object GtpRequestType {
 
-  val csr: GtpRequestType[CreateSessionRequest] =
-    GtpRequestType[CreateSessionRequest](Gtp2HeaderBuilder.of(Gtp2MessageType.CREATE_SESSION_REQUEST).build())
+  val csr: GtpRequestType[CreateSessionRequest] = GtpRequestType[CreateSessionRequest](Gtp2MessageType.CREATE_SESSION_REQUEST)
+  val dsr: GtpRequestType[CreateSessionRequest] = GtpRequestType[CreateSessionRequest](Gtp2MessageType.DELETE_SESSION_REQUEST)
+  // GtpRequestType[CreateSessionRequest](Gtp2HeaderBuilder.of(Gtp2MessageType.CREATE_SESSION_REQUEST).build())
 
 }
 
-final case class GtpRequestType[T <: Gtp2Message](gtpHeader: Gtp2Header)
+final case class GtpRequestType[+T <: Gtp2Message](gtpMessageType: Gtp2MessageType)
 
-case class GtpRequestBuilder[T <: Gtp2Message](requestName: Expression[String], gtpAttributes: GtpAttributes[T]) {
+case class GtpRequestBuilder[+T <: Gtp2Message](requestName: Expression[String], gtpAttributes: GtpAttributes[T]) {
 
   def tliv(tliv: TypeLengthInstanceValue[_ <: GtpType]): GtpRequestBuilder[T] = this.modify(_.gtpAttributes.tlivs).using(_ ::: List(GtpTlivDirect(tliv)))
 

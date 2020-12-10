@@ -23,7 +23,7 @@ object CreateSessionRequest {
   }
 
   val csrBase = gtp("Establish PDN Session")
-    .csr("${imsi}")
+    .createSessionRequest("${imsi}")
     .teid(Teid.ZEROS)
     .randomSeqNo()
     .tliv(createUli)
