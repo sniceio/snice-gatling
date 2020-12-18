@@ -32,7 +32,6 @@ case class GtpRequestAction[T <: Gtp2Message](reqDef: GtpRequestDef[T],
   override def name: String = "GTP"
 
   override def execute(session: Session): Unit = {
-
     val builder: Gtp2MessageBuilder[T] = (reqDef.gtpType.gtpMessageType: @switch) match {
       case Gtp2MessageType.DELETE_SESSION_REQUEST => {
         session.attributes.get(GtpRequestAction.PDN_SESSION_CTX_KEY) match {
@@ -42,7 +41,6 @@ case class GtpRequestAction[T <: Gtp2Message](reqDef: GtpRequestDef[T],
       }
       case _ => Gtp2Message.create(reqDef.gtpType.gtpMessageType)
     }
-
 
     reqDef.imsi.flatMap(i => i.apply(session).toOption) match {
       case Some(imsi) => builder.withImsi(imsi)
@@ -66,7 +64,6 @@ case class GtpRequestAction[T <: Gtp2Message](reqDef: GtpRequestDef[T],
         }
       }
     })
-
 
     val request = builder.build.toGtp2Request // only GTPv2 support right now so...
 

@@ -12,6 +12,7 @@ case class GtpComponents(protocol: GtpProtocol, engine: GtpEngine) extends Proto
   }
 
   override def onExit: Session => Unit = {
+    // engine.stop()
     ProtocolComponents.NoopOnExit
   }
 }

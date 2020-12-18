@@ -51,8 +51,16 @@ class ResponseProcessor(name: String,
     val req = transaction.getRequest
 
     val nextSession = if (req.isCreateSessionRequest) {
-      val ctx = PdnSessionContext.of(req.toGtp2Message.toCreateSessionRequest, response)
-      newSession.set(GtpRequestAction.PDN_SESSION_CTX_KEY, ctx)
+      try {
+        val ctx = PdnSessionContext.of(req.toGtp2Message.toCreateSessionRequest, response)
+        newSession.set(GtpRequestAction.PDN_SESSION_CTX_KEY, ctx)
+      } catch {
+        case e: IllegalArgumentException => {
+          e.printStackTrace()
+          newSession
+        }
+      }
+
     } else {
       newSession
     }

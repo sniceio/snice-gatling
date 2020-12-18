@@ -4,7 +4,7 @@ import com.softwaremill.quicklens._
 import io.gatling.core.session.{Expression, Session}
 import io.snice.codecs.codec.gtp.Teid
 import io.snice.codecs.codec.gtp.gtpc.v2.`type`._
-import io.snice.codecs.codec.gtp.gtpc.v2.messages.tunnel.CreateSessionRequest
+import io.snice.codecs.codec.gtp.gtpc.v2.messages.tunnel.{CreateSessionRequest, DeleteSessionRequest}
 import io.snice.codecs.codec.gtp.gtpc.v2.tliv._
 import io.snice.codecs.codec.gtp.gtpc.v2.{Gtp2Message, Gtp2MessageType}
 import io.snice.codecs.codec.tgpp.ReferencePoint
@@ -37,7 +37,7 @@ trait GtpTliv {
 object GtpRequestType {
 
   val csr: GtpRequestType[CreateSessionRequest] = GtpRequestType[CreateSessionRequest](Gtp2MessageType.CREATE_SESSION_REQUEST)
-  val dsr: GtpRequestType[CreateSessionRequest] = GtpRequestType[CreateSessionRequest](Gtp2MessageType.DELETE_SESSION_REQUEST)
+  val dsr: GtpRequestType[DeleteSessionRequest] = GtpRequestType[DeleteSessionRequest](Gtp2MessageType.DELETE_SESSION_REQUEST)
   // GtpRequestType[CreateSessionRequest](Gtp2HeaderBuilder.of(Gtp2MessageType.CREATE_SESSION_REQUEST).build())
 
 }

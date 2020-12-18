@@ -3,6 +3,7 @@ package io.snice.gatling.requests
 import io.gatling.core.Predef._
 import io.snice.buffer.Buffer
 import io.snice.gatling.gtp.Predef._
+import io.snice.gatling.gtp.data._
 
 object DataRequest {
 
@@ -17,5 +18,26 @@ object DataRequest {
     0x00.toByte, 0x01.toByte, 0x00.toByte, 0x01.toByte)
 
   val dnsRequest = gtp("Send DNS Query")
-    .data(dnsQuery)
+    .data(DnsMessage(dnsQuery))
+    .encoder(new DnsEncoder)
+    .decoder(new DnsDecoder)
+    .localPort(76432)
+    // .remoteAddress("8.8.8.8")
+    // .remotePort(53)
+    .remoteAddress("165.227.89.76")
+    .remotePort(52483)
+}
+
+final class DnsEncoder extends DataEncoder[DnsMessage] {
+  override def encode(request: DnsMessage): Buffer = request.query
+}
+
+final class DnsDecoder extends DataDecoder[DnsMessage] {
+  override def decode(raw: Buffer): DnsMessage = DnsMessage(raw)
+}
+
+final case class DnsMessage(query: Buffer) extends TransactionSupport {
+  private val id = BufferTransactionId(query.slice(2))
+
+  override def transactionId: TransactionId = id
 }

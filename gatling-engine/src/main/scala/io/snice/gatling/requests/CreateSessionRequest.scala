@@ -25,7 +25,7 @@ object CreateSessionRequest {
   val csrBase = gtp("Establish PDN Session")
     .createSessionRequest("${imsi}")
     .teid(Teid.ZEROS)
-    .randomSeqNo()
+    .randomSeqNo() // important! Or set your own seqNo.
     .tliv(createUli)
     .rat(RatType.EUTRAN)
     .aggregateMaximumBitRate(10000, 10000)
@@ -38,6 +38,6 @@ object CreateSessionRequest {
     .senderFTeid("107.20.226.156")
     .bearerFteid("107.20.226.156")
     .bearerEpsId(5)
-    .check(cause.is(16).saveAs("cause_value"))
+  // .check(cause.is(16).saveAs("cause_value"))
 
 }

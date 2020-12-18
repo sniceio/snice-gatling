@@ -18,5 +18,6 @@ object DeleteSessionRequest {
    */
   val dsrBase = gtp("Delete PDN Session")
     .deleteSessionRequest
-    .check(cause.is(16))
+    .randomSeqNo() // important! Or set your own seqNo.
+  // .check(cause.is(16))
 }

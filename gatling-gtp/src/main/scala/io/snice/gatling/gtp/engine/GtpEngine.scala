@@ -17,6 +17,12 @@ object GtpEngine {
 class GtpEngine(config: GtpEngineConfig) extends GtpApplication[GtpEngineConfig] {
 
   private var environment: GtpEnvironment[GtpEngineConfig] = _
+  private val natService = {
+    config.remoteNattedAddress match {
+      case Some(publicAddress) => NatService(config.remoteAddress, publicAddress)
+      case None => NatService()
+    }
+  }
 
   /**
    * Even though Snice GTP Application can of course have many tunnels open to many
@@ -31,6 +37,16 @@ class GtpEngine(config: GtpEngineConfig) extends GtpApplication[GtpEngineConfig]
       b.`match`(event => event.isPdu).consume((tunnel, pdu) => processPdu(tunnel, pdu.toGtp1Message))
     })
   }
+
+  /**
+   * Given the address, either NAT it to another address (because we are behind a NAT compared to
+   * the remote endpoint) or just return the same address again (in the case where the address does not
+   * have a NAT:ed address specified)
+   *
+   * @param address the address to potentially translate to another address
+   * @return the translated (NAT:ed) address or the same address that was given (because there were no mapping)
+   */
+  def translateAddress(address: String): String = natService.natAddress(address)
 
   def processPdu(tunnel: GtpTunnel, pdu: Gtp1Message) = {
     println("yay, got back a PDU")
