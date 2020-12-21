@@ -46,6 +46,7 @@ case class DataRequestAction[T](reqDef: DataRequestDef[T],
   }
 
   private def establishBearer(ctx: PdnSessionContext, localPort: Int): EpsBearer = {
+    System.err.println("Establish GTP User Tunnel")
     val remote = ctx.getDefaultRemoteBearer.getIPv4AddressAsString.get
     val address = engine.translateAddress(remote)
     val tunnel = engine.establishGtpUserTunnel(address)
