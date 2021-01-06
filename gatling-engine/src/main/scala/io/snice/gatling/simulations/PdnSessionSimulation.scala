@@ -28,13 +28,13 @@ class PdnSessionSimulation extends Simulation {
   // reachable IP address (again, from your perspective).
   // .remoteNattedAddress("52.86.110.114")
 
-  setUp(PdnAttachScenario.basicPdnSession.inject(atOnceUsers(1),
-    constantUsersPerSec(1).during(10.seconds),
-    rampUsersPerSec(1) to 10 during (30.seconds),
-    constantUsersPerSec(10).during(1.minutes),
-    rampUsersPerSec(10) to 100 during (1.minutes),
-    constantUsersPerSec(100).during(10.seconds),
-    rampUsersPerSec(100) to 10 during (1.minutes),
+  setUp(PdnAttachScenario.basicPdnSession.inject(atOnceUsers(3),
+    constantUsersPerSec(2).during(5.seconds),
+    // rampUsersPerSec(1) to 10 during (30.seconds),
+    // constantUsersPerSec(10).during(1.minutes),
+    // rampUsersPerSec(10) to 100 during (1.minutes),
+    // constantUsersPerSec(100).during(10.seconds),
+    // rampUsersPerSec(100) to 10 during (1.minutes),
     // rampUsersPerSec(100) to 1000 during (1.minutes),
     // constantUsersPerSec(1000).during(1.minutes),
   )).protocols(gtpProtocol)

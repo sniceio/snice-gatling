@@ -35,8 +35,10 @@ object CreateSessionRequest {
     .noApnRestrictions()
     .pdnAddressAllocation("0.0.0.0")
     .pdnType(PdnType.Type.IPv4)
-    .senderFTeid("52.202.165.16") // TODO: need to get this from the GTP Config...
-    .bearerFteid("52.202.165.16")
+    // .senderFTeid("52.202.165.16") // TODO: need to get this from the GTP Config...
+    // .bearerFteid("52.202.165.16")
+    .senderFTeid("127.0.0.1") // TODO: need to get this from the GTP Config...
+    .bearerFteid("127.0.0.1")
     .bearerEpsId(5)
   // .check(cause.is(16).saveAs("cause_value"))
 

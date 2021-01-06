@@ -77,7 +77,7 @@ class GtpEngine(config: GtpEngineConfig) extends GtpApplication[GtpEngineConfig]
   def establishGtpUserTunnel(address: String): GtpUserTunnel = {
     // TODO: for now, cheating to keep it simple...
     val remote = new InetSocketAddress(address, 2152)
-    environment.establishUserPlane(remote).toCompletableFuture.get
+    environment.establishUserPlane(remote)
   }
 
 }
