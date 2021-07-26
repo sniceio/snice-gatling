@@ -4,6 +4,7 @@ import io.snice.codecs.codec.diameter.avp.api._
 import io.snice.codecs.codec.diameter.{DiameterAnswer, DiameterMessage}
 import io.snice.networking.diameter._
 import io.snice.networking.diameter.event.DiameterEvent
+import io.snice.networking.diameter.peer.fsm.InternalTransactionCacheConfig
 import io.snice.networking.diameter.peer.{Peer, PeerConfiguration}
 
 import scala.collection.JavaConverters._
@@ -12,6 +13,9 @@ object DiameterStack {
 
   def apply(config: DiameterStackConfig): DiameterStack = {
     val bundle: DiameterBundle[DiameterStackConfig] = new DiameterBundle()
+
+    // TODO: needs to be configurable
+    config.getConfig.setInternalTransactionCacheConfig(InternalTransactionCacheConfig.of(300).withMaxEntries(100).build())
     new DiameterStack(config, bundle)
   }
 

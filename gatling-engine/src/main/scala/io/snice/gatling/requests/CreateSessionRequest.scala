@@ -4,7 +4,7 @@ import io.gatling.core.Predef._
 import io.snice.buffer.Buffers
 import io.snice.codecs.codec.MccMnc
 import io.snice.codecs.codec.gtp.Teid
-import io.snice.codecs.codec.gtp.gtpc.v2.`type`._
+import io.snice.codecs.codec.gtp.`type`._
 import io.snice.codecs.codec.gtp.gtpc.v2.tliv.{Mei, ServingNetwork, Uli}
 import io.snice.gatling.gtp.Predef._
 

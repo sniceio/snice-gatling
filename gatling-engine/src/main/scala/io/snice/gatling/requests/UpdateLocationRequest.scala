@@ -27,7 +27,7 @@ object UpdateLocationRequest {
   b.setBit(3, 2, true)
   val ulrFlags = UlrFlags.of(b.build())
 
-  val mccMnc = MccMnc.parse("130/110");
+  val mccMnc = MccMnc.of("130/110");
   val vplmn = VisitedPlmnId.of(mccMnc.toBuffer);
 
   /**

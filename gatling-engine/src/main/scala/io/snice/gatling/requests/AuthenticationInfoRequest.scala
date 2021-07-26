@@ -15,7 +15,7 @@ object AuthenticationInfoRequest {
   val uTranGeran = RequestedUtranGeranAuthenticationInfo.of(NumberOfRequestedVectors.of(3), ImmediateResponsePreferred.of(1))
 
   // val vplmnId = WritableBuffer.of(3).fastForwardWriterIndex
-  val mccMnc = MccMnc.parse("130/110");
+  val mccMnc = MccMnc.of("130/110");
   val vplmn = VisitedPlmnId.of(mccMnc.toBuffer);
 
   val expectedOiReplacement: ApnOiReplacement = ApnOiReplacement.of("hello.apn.mcc123.mcc123.gprs")

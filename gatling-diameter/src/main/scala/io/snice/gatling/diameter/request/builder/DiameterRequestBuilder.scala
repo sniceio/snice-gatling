@@ -3,6 +3,7 @@ package io.snice.gatling.diameter.request.builder
 import java.util.function.{Function => jFunction}
 
 import com.softwaremill.quicklens._
+import io.gatling.commons.validation.Failure
 import io.gatling.core.session.{Expression, Session, StaticStringExpression}
 import io.snice.codecs.codec.diameter.avp.`type`.{DiameterType, DiameterTypeUtils}
 import io.snice.codecs.codec.diameter.avp.api._
@@ -43,7 +44,10 @@ final case class DiameterAvpExpression2[T <: Avp[_ <: DiameterType]](creator: jF
         val avp = creator.apply(diameterTypeValue).asInstanceOf[Avp[DiameterType]]
         Right(avp)
       }
-      case None => Left("Unable to resolve the Gatling Expression Language for ")
+      case None => {
+        val message = resolved.asInstanceOf[Failure].message
+        Left("Unable to resolve the Gatling Expression. " + message)
+      }
     }
   }
 }

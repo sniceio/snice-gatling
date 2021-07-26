@@ -19,6 +19,11 @@ object FullAttachmentScenario {
     .feed(feeder)
     .exec { session =>
       session.set("sessionId", "blah-" + Random.nextInt(10000))
+
+      // TODO: not sure what has changed. I think because the underlying stack is using
+      //       transactions and as such needs this value and it is not being picked up from
+      //       the global settings (has not been implemented just yet)
+      session.set("originHost", "abc.node.epc.mnc001.mcc001.3gppnetwork.org")
     }.exec(AuthenticationInfoRequest.air)
     .exec(session => session.markAsSucceeded) // if you don't want a failure to propagate to the next procedure
     .pause(1.seconds)

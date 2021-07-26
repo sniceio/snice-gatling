@@ -3,7 +3,7 @@ package io.snice.gatling.gtp.request
 import com.softwaremill.quicklens._
 import io.gatling.core.session.{Expression, Session}
 import io.snice.codecs.codec.gtp.Teid
-import io.snice.codecs.codec.gtp.gtpc.v2.`type`._
+import io.snice.codecs.codec.gtp.`type`._
 import io.snice.codecs.codec.gtp.gtpc.v2.messages.tunnel.{CreateSessionRequest, DeleteSessionRequest}
 import io.snice.codecs.codec.gtp.gtpc.v2.tliv._
 import io.snice.codecs.codec.gtp.gtpc.v2.{Gtp2Message, Gtp2MessageType}
