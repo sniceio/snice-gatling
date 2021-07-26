@@ -12,9 +12,15 @@ object PdnAttachScenario {
   val basicPdnSession = scenario("Full PDN Session Scenario")
     .feed(feeder)
     .exec(CreateSessionRequest.csrBase)
+    .pause(500.milliseconds)
+    .exec(DataRequest.dnsRequest)
+    /*
     .pause(1.seconds)
     .exec(DataRequest.dnsRequest)
-    .exec(session => session.markAsSucceeded)
     .pause(1.seconds)
+    .exec(DataRequest.dnsRequest)
+     */
+    // .exec(session => session.markAsSucceeded)
+    .pause(2.seconds)
     .exec(DeleteSessionRequest.dsrBase)
 }

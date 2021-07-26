@@ -5,7 +5,7 @@ import io.snice.buffer.Buffers
 import io.snice.codecs.codec.MccMnc
 import io.snice.codecs.codec.gtp.Teid
 import io.snice.codecs.codec.gtp.gtpc.v2.`type`._
-import io.snice.codecs.codec.gtp.gtpc.v2.tliv.{ServingNetwork, Uli}
+import io.snice.codecs.codec.gtp.gtpc.v2.tliv.{Mei, ServingNetwork, Uli}
 import io.snice.gatling.gtp.Predef._
 
 object CreateSessionRequest {
@@ -30,13 +30,14 @@ object CreateSessionRequest {
     .rat(RatType.EUTRAN)
     .aggregateMaximumBitRate(10000, 10000)
     .tliv(servingNetwork)
+    .tliv(Mei.ofValue("112233445566778"))
     .apnSelectionMode(0)
     .apn("super")
     .noApnRestrictions()
     .pdnAddressAllocation("0.0.0.0")
     .pdnType(PdnType.Type.IPv4)
-    // .senderFTeid("52.202.165.16") // TODO: need to get this from the GTP Config...
-    // .bearerFteid("52.202.165.16")
+    // .senderFTeid("107.20.226.156") // TODO: need to get this from the GTP Config...
+    // .bearerFteid("107.20.226.156")
     .senderFTeid("127.0.0.1") // TODO: need to get this from the GTP Config...
     .bearerFteid("127.0.0.1")
     .bearerEpsId(5)

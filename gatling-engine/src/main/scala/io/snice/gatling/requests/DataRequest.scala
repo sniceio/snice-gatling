@@ -23,8 +23,10 @@ object DataRequest {
     .decoder(new DnsDecoder)
     .localPort(76432)
     // .remoteAddress("8.8.8.8")
-    .remoteAddress("165.227.89.76")
-    .remotePort(53)
+    // .remoteAddress("165.227.89.76")
+    .remoteAddress("127.0.0.1")
+    .remotePort(9999)
+  // .remotePort(53)
 }
 
 final class DnsEncoder extends DataEncoder[DnsMessage] {

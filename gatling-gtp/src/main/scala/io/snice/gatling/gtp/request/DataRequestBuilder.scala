@@ -4,6 +4,9 @@ import com.softwaremill.quicklens._
 import io.gatling.core.session.Expression
 import io.snice.gatling.gtp.action.DataRequestActionBuilder
 import io.snice.gatling.gtp.data.{DataDecoder, DataEncoder}
+import io.snice.preconditions.PreConditions.assertArgument
+
+import scala.concurrent.duration.{Duration, _}
 
 object DataRequestBuilder {
 
@@ -24,13 +27,18 @@ object DataRequestBuilder {
  *                        has been indicated.
  * @param localPort       the local port of the UDP packet we will construct and send across
  *                        the Bearer.
+ * @param timeout         the transaction timeout (if the data has transaction support, if not, this parameter
+ *                        has no meaning). If we have not received a reply within this duration, the data
+ *                        request will be marked as failed (and the session)
  * @param remoteIpAddress the remote IPv4 address encoded in as a Buffer already.
  * @param remotePort      the remote port to which we will send the UDP packet.
  */
 final case class DataAttributes[T](data: T,
+                                   hasTransactionSupport: Boolean,
                                    encoder: DataEncoder[T],
                                    decoder: Option[DataDecoder[T]],
                                    localPort: Int,
+                                   timeout: Option[Duration],
                                    remoteIpAddress: String,
                                    remotePort: Int)
 
@@ -52,6 +60,17 @@ case class DataRequestBuilder[T](requestName: Expression[String], dataAttributes
    * The local port to use in the UDP packet that will be sent across the Bearer.
    */
   def localPort(port: Int): DataRequestBuilder[T] = this.modify(_.dataAttributes.localPort).using(_ => port)
+
+  /**
+   * Specify the transaction timeout. If we have not received a response within this duration, the
+   * data request will be marked as failed and so will the session.
+   *
+   * Note: this parameter only has meaning if the data is indeed sent within a transaction.
+   */
+  def timeout(timeout: Duration): DataRequestBuilder[T] = {
+    assertArgument(timeout != null && timeout.gt(1.milliseconds), "The duration has to be greater than 1 milliseconds")
+    this.modify(_.dataAttributes.timeout).using(_ => Some(timeout))
+  }
 
   /**
    * The remote port to which the UDP packet will be addressed. E.g., if you are to send a DNS query then most

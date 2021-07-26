@@ -18,7 +18,7 @@ class UlrSimulation extends Simulation {
   var peerConfig = new PeerConfiguration();
   peerConfig.setName("hss")
   peerConfig.setMode(Peer.MODE.ACTIVE)
-  peerConfig.setUri(new URI("aaa://10.36.10.74:3868"))
+  peerConfig.setUri(new URI("aaa://10.36.10.77:3868"))
 
   var diameterProtocol = diameter
     .originHost("abc.node.epc.mnc001.mcc001.3gppnetwork.org")

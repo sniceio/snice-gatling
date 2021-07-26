@@ -17,7 +17,6 @@ import io.snice.buffer.Buffer
  */
 trait TransactionSupport {
   def transactionId: TransactionId
-
 }
 
 trait TransactionId
